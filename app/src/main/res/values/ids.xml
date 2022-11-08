@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="groupname_response" type="id" />
-    <item name="groupname" type="id">Group Name</item>
-    <item name="back_button" type="id">Back</item>
-    <item name="create_button" type="id">Create</item>
+
 </resources>
