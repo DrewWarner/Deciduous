@@ -1,6 +1,9 @@
 package com.example.myapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +14,9 @@ public class JoinGroupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.join_group_layout);
+
+        EditText username_response = (EditText)findViewById(R.id.username_response);
+        String username = username_response.getText().toString();
 
         EditText jc1 = (EditText)findViewById(R.id.join_code1);
         EditText jc2 = (EditText)findViewById(R.id.join_code2);
@@ -27,5 +33,19 @@ public class JoinGroupActivity extends AppCompatActivity {
         String c6 = jc6.getText().toString();
 
         String join_code = c1 + c2 + c3 + c4 + c5 + c6;
+
+        Button join_button = (Button) findViewById(R.id.join_button) ;
+        join_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(JoinGroupActivity.this, GroupActivity.class);
+                intent.putExtra("join_code_value", join_code);
+                intent.putExtra("username_value", username);
+                startActivity(intent);
+                finish();
+            }
+        });
+
     }
+
 }
