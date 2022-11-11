@@ -46,7 +46,7 @@
             android:layout_gravity="center"
             android:layout_marginRight="10dp"
             android:text="Confirm"
-            />
+            android:layout_marginEnd="10dp" />
         <Button
             android:id="@+id/cancelProposalBtn"
             android:layout_width="wrap_content"
@@ -54,6 +54,6 @@
             android:layout_marginLeft="10dp"
             android:layout_gravity="center"
             android:text="Cancel"
-            />
+            android:layout_marginStart="10dp" />
     </LinearLayout>
 </LinearLayout>

@@ -33,18 +33,18 @@ public class QuestionActivity extends AppCompatActivity {
     addProposalBtn = findViewById(R.id.addProposalBtn);
     addProposalBtn.setOnClickListener(view -> {
       LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-      LinearLayout questionTag = (LinearLayout) inflater.inflate(R.layout.proposal_tag, proposalsContainer, false);
+      LinearLayout proposalTag = (LinearLayout) inflater.inflate(R.layout.proposal_tag, proposalsContainer, false);
 
       // TODO: add emoji set based on first input
-      LinearLayout emojiEntry = (LinearLayout) inflater.inflate(R.layout.emoji_entry, questionTag, false);
-      questionTag.addView(emojiEntry);
+      LinearLayout emojiEntry = (LinearLayout) inflater.inflate(R.layout.emoji_entry, proposalTag, false);
+      ((LinearLayout) proposalTag.getChildAt(2)).addView(emojiEntry);
 
       addProposalBtn.setVisibility(View.GONE);
       confirmCancelContainer.setVisibility(View.VISIBLE);
 
       confirmProposalBtn.setOnClickListener(v -> {
-        EditText titleInput = (EditText) questionTag.getChildAt(0);
-        TextView proposalTitle = (TextView) questionTag.getChildAt(1);
+        EditText titleInput = (EditText) proposalTag.getChildAt(0);
+        TextView proposalTitle = (TextView) proposalTag.getChildAt(1);
         proposalTitle.setText(titleInput.getText().toString());
         titleInput.setVisibility(View.GONE);
         proposalTitle.setVisibility(View.VISIBLE);
@@ -55,10 +55,10 @@ public class QuestionActivity extends AppCompatActivity {
       cancelProposalBtn.setOnClickListener(v -> {
         addProposalBtn.setVisibility(View.VISIBLE);
         confirmCancelContainer.setVisibility(View.GONE);
-        proposalsContainer.removeView(questionTag);
+        proposalsContainer.removeView(proposalTag);
       });
 
-      proposalsContainer.addView(questionTag);
+      proposalsContainer.addView(proposalTag);
     });
 
     // TODO: use SharedPreference and JSON to store data
