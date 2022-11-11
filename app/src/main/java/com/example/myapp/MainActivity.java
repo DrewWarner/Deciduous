@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
-import edu.illinois.CS465.Decidiuous.R;
 
 import java.util.ArrayList;
 

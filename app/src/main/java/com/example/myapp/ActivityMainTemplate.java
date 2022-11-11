@@ -14,20 +14,21 @@ public class ActivityMainTemplate extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_template);
         Intent intent = getIntent();
-        int group_number = intent.getIntExtra(AddGroup.GROUP_COUNT, 1);
-        switch(group_number) {
-            case 1:
-                RelativeLayout layout = (RelativeLayout) findViewById(R.id.viewGroup1);
-                layout.setVisibility(View.VISIBLE);
-                break;
-            case 2:
-                layout = (RelativeLayout) findViewById(R.id.viewGroup2);
-                layout.setVisibility(View.VISIBLE);
-                break;
-            case 3:
-                layout = (RelativeLayout) findViewById(R.id.viewGroup3);
-                layout.setVisibility(View.VISIBLE);
-                break;
-        }
+        // FIXME: someone who wrote this code may for got to push the GROUP_COUNT part
+//        int group_number = intent.getIntExtra(AddGroup.GROUP_COUNT, 1);
+//        switch(group_number) {
+//            case 1:
+//                RelativeLayout layout = (RelativeLayout) findViewById(R.id.viewGroup1);
+//                layout.setVisibility(View.VISIBLE);
+//                break;
+//            case 2:
+//                layout = (RelativeLayout) findViewById(R.id.viewGroup2);
+//                layout.setVisibility(View.VISIBLE);
+//                break;
+//            case 3:
+//                layout = (RelativeLayout) findViewById(R.id.viewGroup3);
+//                layout.setVisibility(View.VISIBLE);
+//                break;
+//        }
     }
 }
