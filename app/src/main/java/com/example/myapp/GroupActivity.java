@@ -55,7 +55,7 @@ public class GroupActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.group_page);
+    setContentView(R.layout.activity_group);
 
     // group name
     groupNameTextView = findViewById(R.id.groupName);
@@ -149,7 +149,7 @@ public class GroupActivity extends AppCompatActivity {
    */
   private void setQuestionTagReadMode(LinearLayout currentTag) {
     currentTag.setOnClickListener(v -> {
-      Intent intent = new Intent(this, QuestionPage.class);
+      Intent intent = new Intent(this, QuestionActivity.class);
       startActivity(intent);
     });
   }

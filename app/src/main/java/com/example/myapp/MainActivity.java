@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.group_page);
+        setContentView(R.layout.activity_group);
 
         // load saved data
         if(savedInstanceState != null) {
