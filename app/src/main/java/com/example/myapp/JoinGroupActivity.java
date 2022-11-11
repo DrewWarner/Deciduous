@@ -1,8 +1,10 @@
 package com.example.myapp;
 
 import android.os.Bundle;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
+import edu.illinois.CS465.Decidiuous.R;
 
 public class JoinGroupActivity extends AppCompatActivity {
     @Override
