@@ -19,6 +19,7 @@ public class GroupInfo implements Parcelable {
     private GroupInfo(Parcel in) {
         name = in.readString();
         owner = in.readString();
+        questions = in.readArrayList(QuestionInfo.class.getClassLoader());
     }
 
     public int describeContents() {
@@ -27,12 +28,13 @@ public class GroupInfo implements Parcelable {
 
     @Override
     public String toString() {
-        return "Group Name: " + name + "; Owned by: " + owner;
+        return "Group Name: " + name + "; Owned by: " + owner + " with " + questions.size() + " questions";
     }
 
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(name);
         out.writeString(owner);
+        out.writeList(questions);
     }
 
     public static final Creator<GroupInfo> CREATOR = new Creator<GroupInfo>() {
