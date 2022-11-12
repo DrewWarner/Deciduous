@@ -21,26 +21,8 @@ import android.widget.TextView;
 
 import java.util.HashSet;
 
-enum TagStatus {
-  NONE("#FFF6F6F6"),
-  IN_PROGRESS("#FF3700B3"),
-  URGENT("#FFFFCA18"),
-  DONE("#FF00FF00"),
-  ARCHIVED("#FF585858");
-
-  private final String color;
-
-  TagStatus(String action) {
-    this.color = action;
-  }
-
-  public String getColor() {
-    return this.color;
-  }
-}
-
 public class GroupActivity extends AppCompatActivity {
-  private final String groupName = "Sid's Fav Friends"; // TODO: need dynamic (maybe intent)
+  private final String groupName = "Sid's Fav Friends"; // TODO: use Intent data to get the group Name
 
   private TextView groupNameTextView;
   private Button addQuestionBtn;
@@ -71,6 +53,8 @@ public class GroupActivity extends AppCompatActivity {
     initAddQuestionPopupView();
 
     selectedTags = new HashSet<>();
+
+    // TODO: fetch data from globalStore and render them on the screen
   }
 
   private void addNewQuestionTag(String text, TagStatus status) {
@@ -149,6 +133,7 @@ public class GroupActivity extends AppCompatActivity {
    */
   private void setQuestionTagReadMode(LinearLayout currentTag) {
     currentTag.setOnClickListener(v -> {
+      // TODO: what do we need to pass to the new Intent?
       Intent intent = new Intent(this, QuestionActivity.class);
       startActivity(intent);
     });
@@ -158,17 +143,21 @@ public class GroupActivity extends AppCompatActivity {
     editQuestionContainer = findViewById(R.id.editQuestionContainer);
 
     // delete button handler
-    ((Button) editQuestionContainer.getChildAt(0)).setOnClickListener(v -> {
+    editQuestionContainer.getChildAt(0).setOnClickListener(v -> {
       for (LinearLayout tag : selectedTags) {
+        // TODO: also delete tag from global store
         questionsContainer.removeView(tag);
       }
       exitEditMode();
     });
 
     // cancel button handler
-    ((Button) editQuestionContainer.getChildAt(1)).setOnClickListener(v -> exitEditMode());
+    editQuestionContainer.getChildAt(1).setOnClickListener(v -> exitEditMode());
   }
 
+  /**
+   * hide all edit buttons, clear selected tag set
+   */
   private void exitEditMode() {
     for (int i = 0; i < questionsContainer.getChildCount(); i++) {
       LinearLayout currentTag = (LinearLayout) questionsContainer.getChildAt(i);
@@ -192,7 +181,7 @@ public class GroupActivity extends AppCompatActivity {
     ArrayAdapter<TagStatus> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, TagStatus.values());
     ((Spinner) addQuestionPopupView.getChildAt(1)).setAdapter(adapter);
     // popup add button
-    ((Button) addQuestionPopupView.getChildAt(2)).setOnClickListener(v -> {
+    addQuestionPopupView.getChildAt(2).setOnClickListener(v -> {
       String questionText = ((EditText) addQuestionPopupView.getChildAt(0)).getText().toString();
       TagStatus selectedStatus = (TagStatus) ((Spinner) addQuestionPopupView.getChildAt(1)).getSelectedItem();
       addNewQuestionTag(questionText, selectedStatus);
