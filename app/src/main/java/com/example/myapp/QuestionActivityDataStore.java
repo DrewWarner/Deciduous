@@ -9,13 +9,21 @@ public class QuestionActivityDataStore {
   private final HashMap<Integer, ArrayList<ProposalTagInfo>> questionActivityInfo;
 
   /**
-   * init data store of a new question
+   * init data store of a new question if not yet exist
    * @param questionId questionId of the question
    */
   public void initNewQuestionActivity(Integer questionId) {
     if (!questionActivityInfo.containsKey(questionId)) {
       questionActivityInfo.put(questionId, new ArrayList<>());
     }
+  }
+
+  /**
+   * delete question from data store
+   * @param questionId id of the question to delete
+   */
+  public void deleteQuestionActivity(Integer questionId) {
+    questionActivityInfo.remove(questionId);
   }
 
   /**

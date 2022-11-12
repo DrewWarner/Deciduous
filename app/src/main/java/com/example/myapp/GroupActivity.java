@@ -1,6 +1,7 @@
 package com.example.myapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -61,6 +62,7 @@ public class GroupActivity extends AppCompatActivity {
     // inflate the layout of the popup window
     LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
     LinearLayout questionTag = (LinearLayout) inflater.inflate(R.layout.question_tags, questionsContainer, false);
+    questionTag.setId(ViewCompat.generateViewId());
 
     // single click
     setQuestionTagReadMode(questionTag);
@@ -133,8 +135,13 @@ public class GroupActivity extends AppCompatActivity {
    */
   private void setQuestionTagReadMode(LinearLayout currentTag) {
     currentTag.setOnClickListener(v -> {
-      // TODO: what do we need to pass to the new Intent?
       Intent intent = new Intent(this, QuestionActivity.class);
+      String questionTitle = ((TextView) currentTag.getChildAt(2)).getText().toString();
+      intent.putExtra("questionTitle", questionTitle);
+      intent.putExtra("questionId", currentTag.getId());
+
+      QuestionActivityDataStore.getInstance().initNewQuestionActivity(currentTag.getId());
+
       startActivity(intent);
     });
   }
@@ -145,8 +152,8 @@ public class GroupActivity extends AppCompatActivity {
     // delete button handler
     editQuestionContainer.getChildAt(0).setOnClickListener(v -> {
       for (LinearLayout tag : selectedTags) {
-        // TODO: also delete tag from global store
         questionsContainer.removeView(tag);
+        QuestionActivityDataStore.getInstance().deleteQuestionActivity(tag.getId());
       }
       exitEditMode();
     });

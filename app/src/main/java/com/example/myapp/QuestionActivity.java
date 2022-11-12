@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 
@@ -20,8 +21,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 public class QuestionActivity extends AppCompatActivity {
-  private final String questionTitle = "Test title"; // TODO: get from prev intent
-  private final int questionId = 1;   // TODO: get from prev intent
+  private int questionId;
 
   private LinearLayout proposalsContainer;
   private LinearLayout confirmCancelContainer;
@@ -34,11 +34,19 @@ public class QuestionActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_question);
 
-    // == FOR TESTING ONLY, DELETE THIS LINE LATER ==
-    QuestionActivityDataStore.getInstance().initNewQuestionActivity(questionId);
-    // ==============================================
+    questionId = getIntent().getIntExtra("questionId", -1);
 
-    ((TextView) findViewById(R.id.questionTitle)).setText(questionTitle);
+    if (questionId == -1) {
+      new AlertDialog.Builder(this)
+        .setTitle("Question does not exist")
+        .setPositiveButton(android.R.string.yes, null)
+        .setIcon(android.R.drawable.ic_dialog_alert)
+        .show();
+      return;
+    }
+
+    ((TextView) findViewById(R.id.questionTitle)).setText(getIntent().getStringExtra("questionTitle"));
+
     proposalsContainer = findViewById(R.id.proposalsContainer);
     confirmCancelContainer = findViewById(R.id.confirmCancelContainer);
     addProposalBtn = findViewById(R.id.addProposalBtn);
