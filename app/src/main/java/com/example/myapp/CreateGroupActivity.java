@@ -8,6 +8,8 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.security.acl.Group;
+
 public class CreateGroupActivity extends AppCompatActivity {
 
     @Override
@@ -25,32 +27,23 @@ public class CreateGroupActivity extends AppCompatActivity {
             username_response.setText(username);
         }
 
-        String username = username_response.getText().toString();
-
-        String groupname = groupname_response.getText().toString();
-
         Button create_button = (Button) findViewById(R.id.create_button);
-        create_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CreateGroupActivity.this, GroupActivity.class);
-                intent.putExtra("groupname_value", groupname);
-                intent.putExtra("username_value", username);
-                startActivity(intent);
-                finish();
-            }
+
+        create_button.setOnClickListener(v -> {
+            Intent intent = new Intent(this, GroupActivity.class);
+            intent.putExtra("groupname_value", groupname_response.getText().toString());
+            intent.putExtra("username_value", username_response.getText().toString());
+            startActivity(intent);
+            finish();
         });
 
         Button join_button = (Button) findViewById(R.id.join_option);
-        join_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CreateGroupActivity.this, JoinGroupActivity.class);
-                intent.putExtra("groupname_value", groupname);
-                intent.putExtra("username_value", username);
-                startActivity(intent);
-                finish();
-            }
+        join_button.setOnClickListener(v -> {
+            Intent intent = new Intent(this, JoinGroupActivity.class);
+            intent.putExtra("groupname_value", groupname_response.getText().toString());
+            intent.putExtra("username_value", username_response.getText().toString());
+            startActivity(intent);
+            finish();
         });
     }
 }
