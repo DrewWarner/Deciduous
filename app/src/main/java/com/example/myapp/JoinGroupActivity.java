@@ -15,7 +15,15 @@ public class JoinGroupActivity extends AppCompatActivity {
         setContentView(R.layout.join_group_layout);
 
         EditText username_response = (EditText)findViewById(R.id.username_response);
+
+        Bundle b = getIntent().getExtras();
+        if (b != null) {
+            String username = (String) b.get("username_value");
+            username_response.setText(username);
+        }
+
         String username = username_response.getText().toString();
+
 
         EditText jc1 = (EditText)findViewById(R.id.join_code1);
         EditText jc2 = (EditText)findViewById(R.id.join_code2);
@@ -38,6 +46,18 @@ public class JoinGroupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(JoinGroupActivity.this, GroupActivity.class);
+                intent.putExtra("join_code_value", join_code);
+                intent.putExtra("username_value", username);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        Button create_button = (Button) findViewById(R.id.create_option);
+        create_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(JoinGroupActivity.this, CreateGroupActivity.class);
                 intent.putExtra("join_code_value", join_code);
                 intent.putExtra("username_value", username);
                 startActivity(intent);
