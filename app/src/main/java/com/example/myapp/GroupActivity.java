@@ -45,7 +45,7 @@ public class GroupActivity extends AppCompatActivity {
     groupNameTextView = findViewById(R.id.groupName);
 
     String groupName = getIntent().getStringExtra("groupname_value");
-    groupNameTextView.setText(groupName != null ? groupName : "My Group");
+    groupNameTextView.setText(groupName != null ? groupName : "Bob's Group");
 
     // container to hold delete and edit button
     initEditQuestionBar();

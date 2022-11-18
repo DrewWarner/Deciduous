@@ -18,19 +18,23 @@ import java.util.HashMap;
 
 public class ActivityMainTemplate extends AppCompatActivity {
     private LinearLayout groupsContainer;
+    private ArrayList<GroupInfo> groups;
+
     private int groupId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_template);
-        Intent intent = getIntent();
-        groupId = intent.getIntExtra("groupid_value", -1);
+
+        if(savedInstanceState != null) {
+            groups = savedInstanceState.getParcelableArrayList("groups");
+        }
+
+        groupId = getIntent().getIntExtra("groupid_value", -1);
         groupsContainer = findViewById(R.id.groupsContainer);
 
-
-        ArrayList<GroupInfo> groupsList = ActivityMainTemplateDataStore.getInstance().getGroupsList(groupId);
-        for (GroupInfo info : groupsList) {
+        for (GroupInfo info : groups) {
             LinearLayout newTag = createGroupTag(info);
             groupsContainer.addView(newTag);
         }
@@ -41,25 +45,26 @@ public class ActivityMainTemplate extends AppCompatActivity {
             GroupInfo info = new GroupInfo( "Sid's New Group", "Sid", q, 1);
             LinearLayout new_group = createGroupTag(info);
             groupsContainer.addView(new_group);
+            groups.add(info);
             Intent new_intent = new Intent(ActivityMainTemplate.this, JoinGroupActivity.class);
             startActivity(new_intent);
-            finish();
         });
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         LinearLayout groupTag = (LinearLayout) inflater.inflate(R.layout.group_tag, groupsContainer, false);
 
-        for(int i = 0; i < groupId; i++) {
-            Button group_button = (Button) groupTag.getChildAt(i);
-            String group_name = (String) ((Button) groupTag.getChildAt(i)).getText();
-            group_button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(ActivityMainTemplate.this, GroupActivity.class);
-                    intent.putExtra("groupname_value", group_name);
-                    startActivity(intent);
-                    finish();
-                }
-            });
+        if (groupId != -1) {
+            for (int i = 0; i < groupId; i++) {
+                Button group_button = (Button) groupTag.getChildAt(i);
+                String group_name = (String) ((Button) groupTag.getChildAt(i)).getText();
+                group_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(ActivityMainTemplate.this, GroupActivity.class);
+                        intent.putExtra("groupname_value", group_name);
+                        startActivity(intent);
+                    }
+                });
+            }
         }
     }
 
@@ -72,9 +77,13 @@ public class ActivityMainTemplate extends AppCompatActivity {
         groupname_button.setText(info.getName());
         groupname_button.setVisibility(View.VISIBLE);
 
-
-
         return groupTag;
     }
+
+    protected void onSaveInstanceState(Bundle savedInstance) {
+        super.onSaveInstanceState(savedInstance);
+        savedInstance.putParcelableArrayList("groups", groups);
+    }
+
 
 }
