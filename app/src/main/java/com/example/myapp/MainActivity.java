@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_group);
+        setContentView(R.layout.activity_main);
 
         // load saved data
         if(savedInstanceState != null) {
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClick(View v) {
         if (v.getId() == R.id.button_add_group) {
-            Intent intent = new Intent(this, AddGroup.class);
+            Intent intent = new Intent(this, JoinGroupActivity.class);
             startActivity(intent);
         }
     }

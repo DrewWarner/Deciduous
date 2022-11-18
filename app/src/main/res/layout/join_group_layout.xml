@@ -16,21 +16,22 @@
 
         <Button
             android:id="@+id/join_option"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textSize="30sp"
-            android:gravity="left"
+            android:gravity="center"
             android:layout_weight="0.5"
             android:backgroundTint="#3EA3D1"
             android:alpha="0.70"
             android:text="JOIN"
+            android:textColor="@color/blue"
             />
         <Button
             android:id="@+id/create_option"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textSize="30sp"
-            android:gravity="right"
+            android:gravity="center"
             android:layout_weight="0.5"
             android:backgroundTint="#3EA3D1"
             android:alpha="0.70"

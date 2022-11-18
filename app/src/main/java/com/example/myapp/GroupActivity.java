@@ -22,11 +22,10 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.io.Console;
 import java.util.HashSet;
 
 public class GroupActivity extends AppCompatActivity {
-  private String groupName = "Sid's Fav Friends"; // TODO: use Intent data to get the group Name
-
   private TextView groupNameTextView;
   private Button addQuestionBtn;
 
@@ -45,12 +44,8 @@ public class GroupActivity extends AppCompatActivity {
     // group name
     groupNameTextView = findViewById(R.id.groupName);
 
-    Bundle b = getIntent().getExtras();
-    if (b != null) {
-      groupName = (String) b.get("groupname_value");
-    }
-
-    groupNameTextView.setText(groupName);
+    String groupName = getIntent().getStringExtra("groupname_value");
+    groupNameTextView.setText(groupName != null ? groupName : "My Group");
 
     // container to hold delete and edit button
     initEditQuestionBar();
