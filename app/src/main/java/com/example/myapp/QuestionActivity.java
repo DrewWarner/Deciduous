@@ -61,15 +61,11 @@ public class QuestionActivity extends AppCompatActivity {
 
     // add new proposal button
     addProposalBtn.setOnClickListener(view -> {
-      HashMap<String, Pair<Integer, Boolean>> testEntries = new HashMap<>();
-      testEntries.put("\uD83D\uDE00", new Pair<>(1, false));
-      testEntries.put("\uD83E\uDD29", new Pair<>(2, false));
-
       addProposalBtn.setVisibility(View.GONE);
       confirmCancelContainer.setVisibility(View.VISIBLE);
 
-      //  FIXME: use pre defined emoji set in prev intent
-      ProposalTagInfo info = new ProposalTagInfo(ViewCompat.generateViewId(), "", testEntries);
+      HashMap<String, Pair<Integer, Boolean>> defaultEmojis = QuestionActivityDataStore.getInstance().getDefaultEmojiSet(questionId);
+      ProposalTagInfo info = new ProposalTagInfo(ViewCompat.generateViewId(), "", defaultEmojis);
       LinearLayout proposalTag = createProposalTag(info, true);
       proposalsContainer.addView(proposalTag);
     });

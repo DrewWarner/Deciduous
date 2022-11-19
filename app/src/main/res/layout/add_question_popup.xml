@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <EditText
+        android:id="@+id/questionPopupEditTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
@@ -16,11 +17,33 @@
         android:inputType="text" />
 
     <Spinner
+        android:id="@+id/questionPopupStatusSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
         android:background="@android:drawable/btn_dropdown"
         android:spinnerMode="dropdown" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        >
+        <LinearLayout
+            android:id="@+id/questionPopupEmojiList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            />
+        <Button
+            android:id="@+id/questionPopupAddEmojiBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+"
+            />
+    </LinearLayout>
 
     <Button
         android:id="@+id/questionPopupAddBtn"
