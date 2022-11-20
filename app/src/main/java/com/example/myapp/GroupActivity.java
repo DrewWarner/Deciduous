@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -21,9 +22,11 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import com.vdurmont.emoji.Emoji;
+import com.vdurmont.emoji.EmojiManager;
 
-import java.io.Console;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -193,14 +196,14 @@ public class GroupActivity extends AppCompatActivity {
     EditText editTitle = addQuestionPopupView.findViewById(R.id.questionPopupEditTitle);
     Spinner statusSpinner = addQuestionPopupView.findViewById(R.id.questionPopupStatusSpinner);
     LinearLayout defaultEmojiList = addQuestionPopupView.findViewById(R.id.questionPopupEmojiList);
-    Button addEmojiButton = addQuestionPopupView.findViewById(R.id.questionPopupAddEmojiBtn);
+    ImageView addEmojiIcon = addQuestionPopupView.findViewById(R.id.questionPopupAddEmojiIcon);
     Button addNewQuestionButton = addQuestionPopupView.findViewById(R.id.questionPopupAddBtn);
 
     HashMap<String, Pair<Integer, Boolean>> defaultEmojis = new HashMap<>();
 
-    addEmojiButton.setOnClickListener(v -> {
+    addEmojiIcon.setOnClickListener(v -> {
       // show emojiSelector, update defaultEmojis, add to screen view
-      emojiSelectorHandler(defaultEmojiList, defaultEmojis);
+      emojiSelectorHandler(defaultEmojiList, defaultEmojis, addQuestionPopupView);
     });
 
     // status
@@ -228,9 +231,10 @@ public class GroupActivity extends AppCompatActivity {
     });
   }
 
-  private void emojiSelectorHandler(LinearLayout defaultEmojiList, HashMap<String, Pair<Integer, Boolean>> defaultEmojis) {
+  private void emojiSelectorHandler(LinearLayout defaultEmojiList, HashMap<String, Pair<Integer, Boolean>> defaultEmojis, LinearLayout addQuestionPopupView) {
     // TODO: show emojiSelector, update defaultEmojis, add to screen view
-    String selectedEmoji = "\uD83D\uDE00";
+    Collection<Emoji> allEmojis = EmojiManager.getAll();
+    String selectedEmoji = ((Emoji) allEmojis.toArray()[(int) (Math.random() * allEmojis.size())]).getUnicode();
 
     if (!defaultEmojis.containsKey(selectedEmoji)) {
       LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);

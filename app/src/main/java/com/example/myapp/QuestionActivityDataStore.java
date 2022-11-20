@@ -22,7 +22,7 @@ public class QuestionActivityDataStore {
       questionProposalMap.put(questionId, new ArrayList<>());
     }
     if (!questionEmojiSetMap.containsKey(questionId)) {
-      questionEmojiSetMap.put(questionId, emojiSet);
+      questionEmojiSetMap.put(questionId, new HashMap<>(emojiSet));
     }
   }
 

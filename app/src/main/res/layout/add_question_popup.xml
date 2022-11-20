@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingVertical="10dp"
-    android:background="@color/yellow"
+    android:background="@color/grey_blue"
     android:orientation="vertical">
 
     <EditText
@@ -37,11 +37,12 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             />
-        <Button
-            android:id="@+id/questionPopupAddEmojiBtn"
+        <ImageView
+            android:id="@+id/questionPopupAddEmojiIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="+"
+            android:src="@drawable/emoji_1f3a8"
+            android:padding="10dp"
             />
     </LinearLayout>
 
