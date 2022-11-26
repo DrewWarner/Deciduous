@@ -1,71 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="😀"
-        android:textSize="28sp"
-        android:padding="5dp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="😀"
-        android:textSize="28sp"
-        android:padding="5dp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="😀"
-        android:textSize="28sp"
-        android:padding="5dp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="😀"
-        android:textSize="28sp"
-        android:padding="5dp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="😀"
-        android:textSize="28sp"
-        android:padding="5dp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="😀"
-        android:textSize="28sp"
-        android:padding="5dp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="😀"
-        android:textSize="28sp"
-        android:padding="5dp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="😀"
-        android:textSize="28sp"
-        android:padding="5dp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="😀"
-        android:textSize="28sp"
-        android:padding="5dp"
-        />
-
-</LinearLayout>
+    android:layout_height="250dp"
+    android:columnCount="9"
+    android:rowCount="5">
+    <!-- Add emojis programmatically -->
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="😀"-->
+<!--        android:textSize="28sp"-->
+<!--        android:padding="5dp"-->
+<!--        />-->
+</GridLayout>

@@ -6,6 +6,7 @@ import androidx.core.view.ViewCompat;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Pair;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -29,8 +31,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 public class GroupActivity extends AppCompatActivity {
+  private LinearLayout rootView;
   private TextView groupNameTextView;
   private Button addQuestionBtn;
 
@@ -38,6 +42,10 @@ public class GroupActivity extends AppCompatActivity {
   private LinearLayout questionsContainer;
   private PopupWindow addQuestionPopupWindow;  // add question pop up window
   private PopupWindow setStatusPopupWindow;
+  private PopupWindow emojiPickerPopup;
+
+  private final int EMOJI_PICKER_COL_COUNT = 9;
+  private final int EMOJI_PICKER_ROW_COUNT = 5;
 
   private HashSet<LinearLayout> selectedTags;
 
@@ -45,6 +53,8 @@ public class GroupActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_group);
+
+    rootView = findViewById(R.id.group_page_root);
 
     // group name
     groupNameTextView = findViewById(R.id.groupName);
@@ -227,22 +237,43 @@ public class GroupActivity extends AppCompatActivity {
       addQuestionPopupWindow = new PopupWindow(addQuestionPopupView, width, height, true);  // tap outside to dismiss
       // show the popup window
       // which view you pass in doesn't matter, it is only used for the window token
-      addQuestionPopupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+      addQuestionPopupWindow.showAtLocation(rootView, Gravity.CENTER, 0, 0);
     });
   }
 
   private void emojiSelectorHandler(LinearLayout defaultEmojiList, HashMap<String, Pair<Integer, Boolean>> defaultEmojis, LinearLayout addQuestionPopupView) {
-    // TODO: show emojiSelector, update defaultEmojis, add to screen view
-    Collection<Emoji> allEmojis = EmojiManager.getAll();
-    String selectedEmoji = ((Emoji) allEmojis.toArray()[(int) (Math.random() * allEmojis.size())]).getUnicode();
+    List<Emoji> allEmojis = new ArrayList<>(EmojiManager.getAll()).subList(0, EMOJI_PICKER_ROW_COUNT * EMOJI_PICKER_COL_COUNT);
+    DisplayMetrics displayMetrics = new DisplayMetrics();
+    getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+    int screenWidth = displayMetrics.widthPixels;
 
-    if (!defaultEmojis.containsKey(selectedEmoji)) {
-      LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-      LinearLayout emojiEntry = (LinearLayout) inflater.inflate(R.layout.emoji_entry, defaultEmojiList, false);
-      ((TextView) emojiEntry.getChildAt(0)).setText(selectedEmoji);
-      defaultEmojiList.addView(emojiEntry);
-      defaultEmojis.put(selectedEmoji, new Pair<>(0, false));
+    // inflate the layout of the popup window
+    LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+    GridLayout emojiPickerPopupView = (GridLayout) inflater.inflate(R.layout.emoji_picker, null);
+
+    for (Emoji e : allEmojis) {
+      String emojiUnicode = e.getUnicode();
+
+      TextView curr_emoji = new TextView(this);
+      curr_emoji.setText(emojiUnicode);
+      curr_emoji.setTextSize(28);
+      curr_emoji.setWidth(screenWidth / EMOJI_PICKER_COL_COUNT);
+      curr_emoji.setGravity(Gravity.CENTER_HORIZONTAL);
+      curr_emoji.setOnClickListener(v -> {
+        if (!defaultEmojis.containsKey(emojiUnicode)) {
+          LinearLayout emojiEntry = (LinearLayout) inflater.inflate(R.layout.emoji_entry, defaultEmojiList, false);
+          ((TextView) emojiEntry.getChildAt(0)).setText(emojiUnicode);
+          defaultEmojiList.addView(emojiEntry);
+          defaultEmojis.put(emojiUnicode, new Pair<>(0, false));
+        }
+        emojiPickerPopup.dismiss();
+      });
+      emojiPickerPopupView.addView(curr_emoji);
     }
-//    defaultEmojis.put("\uD83E\uDD29", new Pair<>(0, false));
+
+    int width = LinearLayout.LayoutParams.MATCH_PARENT;
+    int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+    emojiPickerPopup = new PopupWindow(emojiPickerPopupView, width, height, true);  // tap outside to dismiss
+    emojiPickerPopup.showAtLocation(rootView, Gravity.BOTTOM, 0, 0);
   }
 }
