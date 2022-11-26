@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="250dp"
     android:columnCount="9"
-    android:rowCount="5">
+    android:rowCount="5"
+    android:background="@color/white"
+    >
     <!-- Add emojis programmatically -->
 <!--    <TextView-->
 <!--        android:layout_width="wrap_content"-->

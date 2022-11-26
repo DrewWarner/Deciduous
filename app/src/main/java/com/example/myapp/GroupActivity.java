@@ -34,7 +34,7 @@ import java.util.HashSet;
 import java.util.List;
 
 public class GroupActivity extends AppCompatActivity {
-  private LinearLayout rootView;
+  private RelativeLayout rootView;
   private TextView groupNameTextView;
   private Button addQuestionBtn;
 
@@ -71,6 +71,8 @@ public class GroupActivity extends AppCompatActivity {
     // add button
     initAddQuestionPopupView();
 
+    ((TextView) findViewById(R.id.showJoinCode)).setText("JOIN CODE: " + "Xb7TY6z0"); // TODO: dynamic
+
     selectedTags = new HashSet<>();
 
     // TODO: fetch data from globalStore and render them on the screen
@@ -89,6 +91,7 @@ public class GroupActivity extends AppCompatActivity {
     questionTag.setOnLongClickListener(view -> {
       // set status select options
       ListView statusOptionList = new ListView(this);
+      statusOptionList.setBackgroundColor(Color.WHITE);       // TODO: change color and style
       ArrayAdapter<TagStatus> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, TagStatus.values());
       statusOptionList.setAdapter(adapter);
       int width = LinearLayout.LayoutParams.MATCH_PARENT;
