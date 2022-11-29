@@ -262,9 +262,13 @@ public class GroupActivity extends AppCompatActivity {
       curr_emoji.setTextSize(28);
       curr_emoji.setWidth(screenWidth / EMOJI_PICKER_COL_COUNT);
       curr_emoji.setGravity(Gravity.CENTER_HORIZONTAL);
-      curr_emoji.setOnClickListener(v -> {
+      curr_emoji.setOnClickListener(view -> {
         if (!defaultEmojis.containsKey(emojiUnicode)) {
           LinearLayout emojiEntry = (LinearLayout) inflater.inflate(R.layout.emoji_entry, defaultEmojiList, false);
+          emojiEntry.setOnClickListener(v -> {
+            defaultEmojiList.removeView(emojiEntry);
+            defaultEmojis.remove(emojiUnicode);
+          });
           ((TextView) emojiEntry.getChildAt(0)).setText(emojiUnicode);
           defaultEmojiList.addView(emojiEntry);
           defaultEmojis.put(emojiUnicode, new Pair<>(0, false));

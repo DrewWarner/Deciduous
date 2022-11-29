@@ -41,8 +41,8 @@
             android:id="@+id/questionPopupAddEmojiIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/emoji_1f3a8"
-            android:padding="10dp"
+            android:src="@drawable/add_reaction"
+            android:paddingHorizontal="5dp"
             />
     </LinearLayout>
 
