@@ -15,6 +15,29 @@
         android:layout_margin="5dp"
         android:text="Question Title" />
 
+    <!-- Edit buttons -->
+    <RelativeLayout
+        android:id="@+id/editProposalContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="20dp"
+        android:visibility="gone"
+        >
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="delete"
+            android:layout_alignParentStart="true" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="cancel"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+
     <!-- List of Proposal Tags -->
     <LinearLayout
         android:id="@+id/proposalsContainer"
