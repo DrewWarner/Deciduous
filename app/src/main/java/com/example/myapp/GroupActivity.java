@@ -6,6 +6,8 @@ import androidx.core.view.ViewCompat;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Pair;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -20,11 +24,17 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.vdurmont.emoji.Emoji;
+import com.vdurmont.emoji.EmojiManager;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 public class GroupActivity extends AppCompatActivity {
-  private final String groupName = "Sid's Fav Friends"; // TODO: use Intent data to get the group Name
-
+  private RelativeLayout rootView;
   private TextView groupNameTextView;
   private Button addQuestionBtn;
 
@@ -32,6 +42,10 @@ public class GroupActivity extends AppCompatActivity {
   private LinearLayout questionsContainer;
   private PopupWindow addQuestionPopupWindow;  // add question pop up window
   private PopupWindow setStatusPopupWindow;
+  private PopupWindow emojiPickerPopup;
+
+  private final int EMOJI_PICKER_COL_COUNT = 9;
+  private final int EMOJI_PICKER_ROW_COUNT = 5;
 
   private HashSet<LinearLayout> selectedTags;
 
@@ -40,9 +54,13 @@ public class GroupActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_group);
 
+    rootView = findViewById(R.id.group_page_root);
+
     // group name
     groupNameTextView = findViewById(R.id.groupName);
-    groupNameTextView.setText(groupName);
+
+    String groupName = getIntent().getStringExtra("groupname_value");
+    groupNameTextView.setText(groupName != null ? groupName : "Bob's Group");
 
     // container to hold delete and edit button
     initEditQuestionBar();
@@ -53,24 +71,27 @@ public class GroupActivity extends AppCompatActivity {
     // add button
     initAddQuestionPopupView();
 
+    ((TextView) findViewById(R.id.showJoinCode)).setText("JOIN CODE: " + "Xb7TY6z0"); // TODO: dynamic
+
     selectedTags = new HashSet<>();
 
     // TODO: fetch data from globalStore and render them on the screen
   }
 
-  private void addNewQuestionTag(String text, TagStatus status) {
+  private void addNewQuestionTag(String text, TagStatus status, HashMap<String, Pair<Integer, Boolean>> emojiSet) {
     // inflate the layout of the popup window
     LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
     LinearLayout questionTag = (LinearLayout) inflater.inflate(R.layout.question_tags, questionsContainer, false);
     questionTag.setId(ViewCompat.generateViewId());
 
     // single click
-    setQuestionTagReadMode(questionTag);
+    setQuestionTagReadMode(questionTag, emojiSet);
 
     // long press
     questionTag.setOnLongClickListener(view -> {
       // set status select options
       ListView statusOptionList = new ListView(this);
+      statusOptionList.setBackgroundColor(Color.WHITE);       // TODO: change color and style
       ArrayAdapter<TagStatus> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, TagStatus.values());
       statusOptionList.setAdapter(adapter);
       int width = LinearLayout.LayoutParams.MATCH_PARENT;
@@ -133,15 +154,15 @@ public class GroupActivity extends AppCompatActivity {
    * Read Mode: click question tags to go to the questions
    * @param currentTag LinearLayout of the current question tag
    */
-  private void setQuestionTagReadMode(LinearLayout currentTag) {
+  private void setQuestionTagReadMode(LinearLayout currentTag, HashMap<String, Pair<Integer, Boolean>> emojiSet) {
     currentTag.setOnClickListener(v -> {
       Intent intent = new Intent(this, QuestionActivity.class);
       String questionTitle = ((TextView) currentTag.getChildAt(2)).getText().toString();
       intent.putExtra("questionTitle", questionTitle);
       intent.putExtra("questionId", currentTag.getId());
-
-      QuestionActivityDataStore.getInstance().initNewQuestionActivity(currentTag.getId());
-
+      if (emojiSet != null) {
+        QuestionActivityDataStore.getInstance().initNewQuestionActivity(currentTag.getId(), emojiSet);
+      }
       startActivity(intent);
     });
   }
@@ -171,7 +192,7 @@ public class GroupActivity extends AppCompatActivity {
       CheckBox box = (CheckBox) currentTag.getChildAt(0);
       box.setVisibility(View.GONE);
       box.setChecked(false);
-      setQuestionTagReadMode(currentTag);
+      setQuestionTagReadMode(currentTag, null);
     }
     selectedTags.clear();
     editQuestionContainer.setVisibility(View.GONE);
@@ -184,14 +205,29 @@ public class GroupActivity extends AppCompatActivity {
     // inflate the layout of the popup window
     LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
     LinearLayout addQuestionPopupView = (LinearLayout) inflater.inflate(R.layout.add_question_popup, null);
+
+    EditText editTitle = addQuestionPopupView.findViewById(R.id.questionPopupEditTitle);
+    Spinner statusSpinner = addQuestionPopupView.findViewById(R.id.questionPopupStatusSpinner);
+    LinearLayout defaultEmojiList = addQuestionPopupView.findViewById(R.id.questionPopupEmojiList);
+    ImageView addEmojiIcon = addQuestionPopupView.findViewById(R.id.questionPopupAddEmojiIcon);
+    Button addNewQuestionButton = addQuestionPopupView.findViewById(R.id.questionPopupAddBtn);
+
+    HashMap<String, Pair<Integer, Boolean>> defaultEmojis = new HashMap<>();
+
+    addEmojiIcon.setOnClickListener(v -> {
+      // show emojiSelector, update defaultEmojis, add to screen view
+      emojiSelectorHandler(defaultEmojiList, defaultEmojis, addQuestionPopupView);
+    });
+
     // status
     ArrayAdapter<TagStatus> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, TagStatus.values());
-    ((Spinner) addQuestionPopupView.getChildAt(1)).setAdapter(adapter);
+    statusSpinner.setAdapter(adapter);
+
     // popup add button
-    addQuestionPopupView.getChildAt(2).setOnClickListener(v -> {
-      String questionText = ((EditText) addQuestionPopupView.getChildAt(0)).getText().toString();
-      TagStatus selectedStatus = (TagStatus) ((Spinner) addQuestionPopupView.getChildAt(1)).getSelectedItem();
-      addNewQuestionTag(questionText, selectedStatus);
+    addNewQuestionButton.setOnClickListener(v -> {
+      String questionText = editTitle.getText().toString();
+      TagStatus selectedStatus = (TagStatus) statusSpinner.getSelectedItem();
+      addNewQuestionTag(questionText, selectedStatus, defaultEmojis);
       addQuestionPopupWindow.dismiss();
     });
 
@@ -204,7 +240,47 @@ public class GroupActivity extends AppCompatActivity {
       addQuestionPopupWindow = new PopupWindow(addQuestionPopupView, width, height, true);  // tap outside to dismiss
       // show the popup window
       // which view you pass in doesn't matter, it is only used for the window token
-      addQuestionPopupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+      addQuestionPopupWindow.showAtLocation(rootView, Gravity.CENTER, 0, 0);
     });
+  }
+
+  private void emojiSelectorHandler(LinearLayout defaultEmojiList, HashMap<String, Pair<Integer, Boolean>> defaultEmojis, LinearLayout addQuestionPopupView) {
+    List<Emoji> allEmojis = new ArrayList<>(EmojiManager.getAll()).subList(0, EMOJI_PICKER_ROW_COUNT * EMOJI_PICKER_COL_COUNT);
+    DisplayMetrics displayMetrics = new DisplayMetrics();
+    getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+    int screenWidth = displayMetrics.widthPixels;
+
+    // inflate the layout of the popup window
+    LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+    GridLayout emojiPickerPopupView = (GridLayout) inflater.inflate(R.layout.emoji_picker, null);
+
+    for (Emoji e : allEmojis) {
+      String emojiUnicode = e.getUnicode();
+
+      TextView curr_emoji = new TextView(this);
+      curr_emoji.setText(emojiUnicode);
+      curr_emoji.setTextSize(28);
+      curr_emoji.setWidth(screenWidth / EMOJI_PICKER_COL_COUNT);
+      curr_emoji.setGravity(Gravity.CENTER_HORIZONTAL);
+      curr_emoji.setOnClickListener(view -> {
+        if (!defaultEmojis.containsKey(emojiUnicode)) {
+          LinearLayout emojiEntry = (LinearLayout) inflater.inflate(R.layout.emoji_entry, defaultEmojiList, false);
+          emojiEntry.setOnClickListener(v -> {
+            defaultEmojiList.removeView(emojiEntry);
+            defaultEmojis.remove(emojiUnicode);
+          });
+          ((TextView) emojiEntry.getChildAt(0)).setText(emojiUnicode);
+          defaultEmojiList.addView(emojiEntry);
+          defaultEmojis.put(emojiUnicode, new Pair<>(0, false));
+        }
+        emojiPickerPopup.dismiss();
+      });
+      emojiPickerPopupView.addView(curr_emoji);
+    }
+
+    int width = LinearLayout.LayoutParams.MATCH_PARENT;
+    int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+    emojiPickerPopup = new PopupWindow(emojiPickerPopupView, width, height, true);  // tap outside to dismiss
+    emojiPickerPopup.showAtLocation(rootView, Gravity.BOTTOM, 0, 0);
   }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/group_page_root"
     android:layout_width="match_parent"
@@ -10,6 +10,7 @@
         android:id="@+id/groupName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:textSize="30sp"
         android:gravity="center_horizontal"
         android:layout_margin="5dp"
@@ -22,6 +23,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginHorizontal="20dp"
+        android:layout_below="@id/groupName"
         android:visibility="gone"
         >
         <Button
@@ -45,13 +47,25 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="vertical"
+        android:layout_below="@id/editQuestionContainer"
         />
 
     <Button
         android:id="@+id/addQuestionBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="+"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/questionsContainer"
+        android:text="Add Question"
         />
-</LinearLayout>
+
+    <TextView
+        android:id="@+id/showJoinCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:text="JOIN CODE"
+        android:padding="5dp"
+        android:textSize="24sp" />
+</RelativeLayout>

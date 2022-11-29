@@ -1,21 +1,37 @@
 package com.example.myapp;
 
+import android.util.Pair;
+
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class QuestionActivityDataStore {
   // map questionId -> proposalsList
-  private final HashMap<Integer, ArrayList<ProposalTagInfo>> questionActivityInfo;
+  private final HashMap<Integer, ArrayList<ProposalTagInfo>> questionProposalMap;
+  // map questionId -> default emoji set of the question
+  private final HashMap<Integer, HashMap<String, Pair<Integer, Boolean>>> questionEmojiSetMap;
 
   /**
    * init data store of a new question if not yet exist
    * @param questionId questionId of the question
+   * @param emojiSet default emoji set of the question
    */
-  public void initNewQuestionActivity(Integer questionId) {
-    if (!questionActivityInfo.containsKey(questionId)) {
-      questionActivityInfo.put(questionId, new ArrayList<>());
+  public void initNewQuestionActivity(Integer questionId, HashMap<String, Pair<Integer, Boolean>> emojiSet) {
+    if (!questionProposalMap.containsKey(questionId)) {
+      questionProposalMap.put(questionId, new ArrayList<>());
     }
+    if (!questionEmojiSetMap.containsKey(questionId)) {
+      questionEmojiSetMap.put(questionId, new HashMap<>(emojiSet));
+    }
+  }
+
+  public HashMap<String, Pair<Integer, Boolean>> getDefaultEmojiSet(Integer questionId) {
+    HashMap<String, Pair<Integer, Boolean>> res = questionEmojiSetMap.get(questionId);
+    if (res == null) {
+      throw new InvalidParameterException("question does not exist");
+    }
+    return res;
   }
 
   /**
@@ -23,7 +39,7 @@ public class QuestionActivityDataStore {
    * @param questionId id of the question to delete
    */
   public void deleteQuestionActivity(Integer questionId) {
-    questionActivityInfo.remove(questionId);
+    questionProposalMap.remove(questionId);
   }
 
   /**
@@ -32,8 +48,8 @@ public class QuestionActivityDataStore {
    * @param proposalInfo proposal info
    */
   public void putProposal(Integer questionId, ProposalTagInfo proposalInfo) {
-    if (questionActivityInfo.containsKey(questionId)) {
-      ArrayList<ProposalTagInfo> list = questionActivityInfo.get(questionId);
+    if (questionProposalMap.containsKey(questionId)) {
+      ArrayList<ProposalTagInfo> list = questionProposalMap.get(questionId);
       assert list != null;
       for (ProposalTagInfo info : list) {
         if (info.getId() == proposalInfo.getId()) {
@@ -53,8 +69,8 @@ public class QuestionActivityDataStore {
    * @param proposalId id of the proposal to remove
    */
   public void removeProposal(Integer questionId, int proposalId) {
-    if (questionActivityInfo.containsKey(questionId)) {
-      ArrayList<ProposalTagInfo> list = questionActivityInfo.get(questionId);
+    if (questionProposalMap.containsKey(questionId)) {
+      ArrayList<ProposalTagInfo> list = questionProposalMap.get(questionId);
       assert list != null;
       for (ProposalTagInfo info : list) {
         if (info.getId() == proposalId) {
@@ -74,7 +90,7 @@ public class QuestionActivityDataStore {
    * @return proposalsList of the question, or null if question not exist
    */
   public ArrayList<ProposalTagInfo> getProposalsList(Integer questionId) {
-    ArrayList<ProposalTagInfo> res = questionActivityInfo.get(questionId);
+    ArrayList<ProposalTagInfo> res = questionProposalMap.get(questionId);
     if (res == null) {
       throw new InvalidParameterException("question does not exist");
     }
@@ -85,7 +101,8 @@ public class QuestionActivityDataStore {
   public static QuestionActivityDataStore getInstance() { return holder; }
 
   private QuestionActivityDataStore() {
-    questionActivityInfo = new HashMap<>();
+    questionProposalMap = new HashMap<>();
+    questionEmojiSetMap = new HashMap<>();
   }
   private static final QuestionActivityDataStore holder = new QuestionActivityDataStore();
 }

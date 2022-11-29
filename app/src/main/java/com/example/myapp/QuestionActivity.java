@@ -38,7 +38,7 @@ public class QuestionActivity extends AppCompatActivity {
   private Button cancelProposalBtn;
 
   private RelativeLayout editProposalContainer;
-  private HashSet<LinearLayout> selectedProps;
+  private LinearLayout selectedProp;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -75,15 +75,11 @@ public class QuestionActivity extends AppCompatActivity {
 
     // add new proposal button
     addProposalBtn.setOnClickListener(view -> {
-      HashMap<String, Pair<Integer, Boolean>> testEntries = new HashMap<>();
-      testEntries.put("\uD83D\uDE00", new Pair<>(1, false));
-      testEntries.put("\uD83E\uDD29", new Pair<>(2, false));
-
       addProposalBtn.setVisibility(View.GONE);
       confirmCancelContainer.setVisibility(View.VISIBLE);
 
-      //  FIXME: use pre defined emoji set in prev intent
-      ProposalTagInfo info = new ProposalTagInfo(ViewCompat.generateViewId(), "", testEntries);
+      HashMap<String, Pair<Integer, Boolean>> defaultEmojis = QuestionActivityDataStore.getInstance().getDefaultEmojiSet(questionId);
+      ProposalTagInfo info = new ProposalTagInfo(ViewCompat.generateViewId(), "", defaultEmojis);
       LinearLayout proposalTag = createProposalTag(info, true);
       proposalsContainer.addView(proposalTag);
 
@@ -92,18 +88,9 @@ public class QuestionActivity extends AppCompatActivity {
 
       // long press
       proposalTag.setOnLongClickListener(subview -> {
-        // select current proposal, unselect all other proposals
-        for (int i = 0; i < proposalsContainer.getChildCount(); i++) {
-          LinearLayout currentTag = (LinearLayout) proposalsContainer.getChildAt(i);
-          setProposalEditMode(currentTag);
-          CheckBox box = (CheckBox) currentTag.getChildAt(0);
-          box.setVisibility(View.VISIBLE);
-          box.setChecked(false);
-        }
-        ((CheckBox) proposalTag.getChildAt(0)).setChecked(true);
-        selectedProps.clear();
-        selectedProps.add(proposalTag);
-
+        // select current proposal
+        selectedProp = proposalTag;
+        proposalTag.setBackgroundColor(0xff6200ee);
         // show delete button
         editProposalContainer.setVisibility(View.VISIBLE);
         return true;
@@ -116,10 +103,8 @@ public class QuestionActivity extends AppCompatActivity {
 
     // delete button handler
     editProposalContainer.getChildAt(0).setOnClickListener(v -> {
-      for (LinearLayout tag : selectedProps) {
-        proposalsContainer.removeView(tag);
-        QuestionActivityDataStore.getInstance().deleteQuestionActivity(tag.getId());
-      }
+      proposalsContainer.removeView(selectedProp);
+      //TODO: anything else to delete here??
       exitEditMode();
     });
 
@@ -128,14 +113,8 @@ public class QuestionActivity extends AppCompatActivity {
   }
 
   private void exitEditMode() {
-    for (int i = 0; i < proposalsContainer.getChildCount(); i++) {
-      LinearLayout currentTag = (LinearLayout) proposalsContainer.getChildAt(i);
-      CheckBox box = (CheckBox) currentTag.getChildAt(0);
-      box.setVisibility(View.GONE);
-      box.setChecked(false);
-      setProposalReadMode(currentTag);
-    }
-    selectedProps.clear();
+    selectedProp.setBackgroundColor(0xffffffff);
+    selectedProp = null;
     editProposalContainer.setVisibility(View.GONE);
     addProposalBtn.setVisibility(View.VISIBLE);
   }
@@ -145,15 +124,6 @@ public class QuestionActivity extends AppCompatActivity {
    * @param currentTag LinearLayout of the current question tag
    */
   private void setProposalEditMode(LinearLayout currentTag) {
-    currentTag.setOnClickListener(v -> {
-      CheckBox checkbox = (CheckBox) currentTag.getChildAt(0);
-      checkbox.toggle();
-      if (checkbox.isChecked()) {
-        selectedProps.add(currentTag);
-      } else {
-        selectedProps.remove(currentTag);
-      }
-    });
   }
 
   /**
@@ -161,16 +131,7 @@ public class QuestionActivity extends AppCompatActivity {
    * @param currentTag LinearLayout of the current question tag
    */
   private void setProposalReadMode(LinearLayout currentTag) {
-    currentTag.setOnClickListener(v -> {
-      Intent intent = new Intent(this, QuestionActivity.class);
-      String questionTitle = ((TextView) currentTag.getChildAt(2)).getText().toString();
-      intent.putExtra("questionTitle", questionTitle);
-      intent.putExtra("questionId", currentTag.getId());
 
-      QuestionActivityDataStore.getInstance().initNewQuestionActivity(currentTag.getId());
-
-      startActivity(intent);
-    });
   }
 
   /**

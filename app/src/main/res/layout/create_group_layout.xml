@@ -16,10 +16,10 @@
 
         <Button
             android:id="@+id/join_option"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textSize="30sp"
-            android:gravity="left"
+            android:gravity="center"
             android:layout_weight="0.5"
             android:backgroundTint="#3EA3D1"
             android:alpha="0.70"
@@ -27,14 +27,15 @@
             />
         <Button
             android:id="@+id/create_option"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textSize="30sp"
-            android:gravity="right"
+            android:gravity="center"
             android:layout_weight="0.5"
             android:backgroundTint="#3EA3D1"
             android:alpha="0.70"
             android:text="CREATE"
+            android:textColor="@color/blue"
             />
     </LinearLayout>
 
@@ -107,15 +108,14 @@
             android:layout_height="wrap_content"
             android:text="CREATE" />
 
-
-
     </LinearLayout>
-    <Button
-        android:id="@+id/back_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:layout_marginLeft="25dp"
-        android:text="Back" />
+
+<!--    <Button-->
+<!--        android:id="@+id/back_button"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="100dp"-->
+<!--        android:layout_marginLeft="25dp"-->
+<!--        android:text="Back" />-->
 
 </LinearLayout>
