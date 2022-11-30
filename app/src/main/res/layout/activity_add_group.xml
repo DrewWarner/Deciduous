@@ -14,10 +14,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
+            android:layout_height="709dp"
             android:layout_gravity="center"
             android:layout_margin="25dp"
+            android:orientation="horizontal"
             android:paddingTop="50dp"
             android:weightSum="1.0">
 
@@ -25,26 +25,28 @@
                 android:id="@+id/join_option"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="30sp"
-                android:gravity="start"
                 android:layout_weight="0.5"
-                android:backgroundTint="#3EA3D1"
+                android:layout_marginLeft="30dp"
                 android:alpha="0.70"
-                android:text="JOIN"
-                />
+                android:backgroundTint="@color/red"
+                android:gravity="center"
+                android:text="Join"
+                android:layout_marginTop="80dp"
+                android:textSize="30sp" />
+
             <Button
                 android:id="@+id/create_option"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="30sp"
-                android:gravity="end"
                 android:layout_weight="0.5"
-                android:backgroundTint="#3EA3D1"
+                android:layout_marginRight="50dp"
                 android:alpha="0.70"
+                android:backgroundTint="@color/red"
+                android:gravity="center"
                 android:text="CREATE"
-                />
+                android:layout_marginTop="80dp"
+                android:textSize="30sp" />
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -74,6 +76,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="0dp"
+                    android:textSize="30sp"
                     android:autofillHints="enter group name"/>
             </LinearLayout>
 
