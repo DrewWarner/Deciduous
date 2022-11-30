@@ -1,15 +1,22 @@
 package com.example.myapp;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Pair;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -18,6 +25,7 @@ import androidx.core.view.ViewCompat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map.Entry;
 
 public class QuestionActivity extends AppCompatActivity {
@@ -29,10 +37,16 @@ public class QuestionActivity extends AppCompatActivity {
   private Button confirmProposalBtn;
   private Button cancelProposalBtn;
 
+  private RelativeLayout editProposalContainer;
+  private LinearLayout selectedProp;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_question);
+
+    // edit question bar
+    initEditQuestionBar();
 
     questionId = getIntent().getIntExtra("questionId", -1);
 
@@ -68,7 +82,56 @@ public class QuestionActivity extends AppCompatActivity {
       ProposalTagInfo info = new ProposalTagInfo(ViewCompat.generateViewId(), "", defaultEmojis);
       LinearLayout proposalTag = createProposalTag(info, true);
       proposalsContainer.addView(proposalTag);
+
+      // single click
+      setProposalReadMode(proposalTag);
+
+      // long press
+      proposalTag.setOnLongClickListener(subview -> {
+        // select current proposal
+        selectedProp = proposalTag;
+        proposalTag.setBackgroundColor(0xff6200ee);
+        // show delete button
+        editProposalContainer.setVisibility(View.VISIBLE);
+        return true;
+      });
     });
+  }
+
+  void initEditQuestionBar() {
+    editProposalContainer = findViewById(R.id.editProposalContainer);
+
+    // delete button handler
+    editProposalContainer.getChildAt(0).setOnClickListener(v -> {
+      proposalsContainer.removeView(selectedProp);
+      //TODO: anything else to delete here??
+      exitEditMode();
+    });
+
+    // cancel button handler
+    editProposalContainer.getChildAt(1).setOnClickListener(v -> exitEditMode());
+  }
+
+  private void exitEditMode() {
+    selectedProp.setBackgroundColor(0xffffffff);
+    selectedProp = null;
+    editProposalContainer.setVisibility(View.GONE);
+    addProposalBtn.setVisibility(View.VISIBLE);
+  }
+
+  /**
+   * Edit Mode: click to toggle tag selection
+   * @param currentTag LinearLayout of the current question tag
+   */
+  private void setProposalEditMode(LinearLayout currentTag) {
+  }
+
+  /**
+   * Read Mode: click question tags to go to the questions
+   * @param currentTag LinearLayout of the current question tag
+   */
+  private void setProposalReadMode(LinearLayout currentTag) {
+
   }
 
   /**
