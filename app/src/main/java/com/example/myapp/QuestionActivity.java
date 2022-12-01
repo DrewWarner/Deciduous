@@ -67,6 +67,14 @@ public class QuestionActivity extends AppCompatActivity {
     for (ProposalTagInfo info : proposalsList) {
       LinearLayout newTag = createProposalTag(info, false);
       proposalsContainer.addView(newTag);
+      newTag.setOnLongClickListener(subview -> {
+        // select current proposal
+        selectedProp = newTag;
+        newTag.setBackgroundColor(0xffffdddd);
+        // show delete button
+        editProposalContainer.setVisibility(View.VISIBLE);
+        return true;
+      });
     }
 
     // add new proposal button
@@ -86,7 +94,7 @@ public class QuestionActivity extends AppCompatActivity {
       proposalTag.setOnLongClickListener(subview -> {
         // select current proposal
         selectedProp = proposalTag;
-        proposalTag.setBackgroundColor(0xff6200ee);
+        proposalTag.setBackgroundColor(0xffffdddd);
         // show delete button
         editProposalContainer.setVisibility(View.VISIBLE);
         return true;
