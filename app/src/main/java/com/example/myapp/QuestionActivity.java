@@ -70,6 +70,9 @@ public class QuestionActivity extends AppCompatActivity {
       newTag.setOnLongClickListener(subview -> {
         // select current proposal
         selectedProp = newTag;
+        for(int i = 0; i < proposalsContainer.getChildCount(); i++) {
+          proposalsContainer.getChildAt(i).setBackgroundColor(0xffffffff);
+        }
         newTag.setBackgroundColor(0xffffdddd);
         // show delete button
         editProposalContainer.setVisibility(View.VISIBLE);
@@ -94,6 +97,9 @@ public class QuestionActivity extends AppCompatActivity {
       proposalTag.setOnLongClickListener(subview -> {
         // select current proposal
         selectedProp = proposalTag;
+        for(int i = 0; i < proposalsContainer.getChildCount(); i++) {
+          proposalsContainer.getChildAt(i).setBackgroundColor(0xffffffff);
+        }
         proposalTag.setBackgroundColor(0xffffdddd);
         // show delete button
         editProposalContainer.setVisibility(View.VISIBLE);
