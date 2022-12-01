@@ -16,6 +16,10 @@ public class GroupDataStore {
   private final HashMap<Integer, ArrayList<ProposalTagInfo>> questionProposalMap;
   // map questionId -> default emoji set of the question
   private final HashMap<Integer, HashMap<String, Pair<Integer, Boolean>>> questionEmojiSetMap;
+  // map questionId -> questionStatus
+  private final HashMap<Integer, TagStatus> questionStatusMap;
+  // map questionId -> question Title
+  private final HashMap<Integer, String> questionTitleMap;
   private final String joinCode;
   private final String groupName;
 
@@ -31,6 +35,30 @@ public class GroupDataStore {
     if (!questionEmojiSetMap.containsKey(questionId)) {
       questionEmojiSetMap.put(questionId, new HashMap<>(emojiSet));
     }
+    if (!questionStatusMap.containsKey(questionId)) {
+      questionStatusMap.put(questionId, TagStatus.NONE);
+    }
+  }
+
+  public void setQuestionStatus(Integer questionId, TagStatus status) {
+    questionStatusMap.put(questionId, status);
+  }
+
+  public TagStatus getQuestionStatus(Integer questionId) {
+    return questionStatusMap.get(questionId);
+  }
+
+  public void setQuestionTitle(Integer questionId, String title) {
+    questionTitleMap.put(questionId, title);
+  }
+
+  public String getQuestionTitle(Integer questionId) {
+    return questionTitleMap.get(questionId);
+  }
+
+  // should use return value as read only object
+  public HashMap<Integer, HashMap<String, Pair<Integer, Boolean>>> getQuestionEmojiSetMap() {
+    return questionEmojiSetMap;
   }
 
   public HashMap<String, Pair<Integer, Boolean>> getDefaultEmojiSet(Integer questionId) {
@@ -47,6 +75,9 @@ public class GroupDataStore {
    */
   public void deleteQuestionActivity(Integer questionId) {
     questionProposalMap.remove(questionId);
+    questionEmojiSetMap.remove(questionId);
+    questionStatusMap.remove(questionId);
+    questionTitleMap.remove(questionId);
   }
 
   /**
@@ -107,6 +138,8 @@ public class GroupDataStore {
   public GroupDataStore(String name) {
     questionProposalMap = new HashMap<>();
     questionEmojiSetMap = new HashMap<>();
+    questionStatusMap = new HashMap<>();
+    questionTitleMap = new HashMap<>();
     joinCode = generateJoinCode();
     groupName = name;
   }
@@ -115,6 +148,8 @@ public class GroupDataStore {
   public GroupDataStore(String name, String code) {
     questionProposalMap = new HashMap<>();
     questionEmojiSetMap = new HashMap<>();
+    questionStatusMap = new HashMap<>();
+    questionTitleMap = new HashMap<>();
     joinCode = code;
     groupName = name;
   }

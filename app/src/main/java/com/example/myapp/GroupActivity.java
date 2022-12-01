@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 public class GroupActivity extends AppCompatActivity {
   private RelativeLayout rootView;
@@ -77,17 +78,29 @@ public class GroupActivity extends AppCompatActivity {
 
     selectedTags = new HashSet<>();
 
-    // TODO: fetch data from globalStore and render them on the screen
+    // fetch data from globalStore and render them on the screen
+    HashMap<Integer, HashMap<String, Pair<Integer, Boolean>>> questionData = dataStore.getQuestionEmojiSetMap();
+    for (Map.Entry<Integer, HashMap<String, Pair<Integer, Boolean>>> p : questionData.entrySet()) {
+      Integer questionId = p.getKey();
+      TagStatus stat = dataStore.getQuestionStatus(questionId);
+      String title = dataStore.getQuestionTitle(questionId);
+      addNewQuestionTag(title, stat, p.getValue(), questionId);
+    }
   }
 
-  private void addNewQuestionTag(String text, TagStatus status, HashMap<String, Pair<Integer, Boolean>> emojiSet) {
+  private void addNewQuestionTag(String text, TagStatus status, HashMap<String, Pair<Integer, Boolean>> emojiSet, Integer questionId) {
     // inflate the layout of the popup window
     LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
     LinearLayout questionTag = (LinearLayout) inflater.inflate(R.layout.question_tags, questionsContainer, false);
-    questionTag.setId(ViewCompat.generateViewId());
+    if (questionId == -1) {
+      questionId = ViewCompat.generateViewId();
+    }
+    questionTag.setId(questionId);
+
+    dataStore.initNewQuestionActivity(questionId, emojiSet);
 
     // single click
-    setQuestionTagReadMode(questionTag, emojiSet);
+    setQuestionTagReadMode(questionTag);
 
     // long press
     questionTag.setOnLongClickListener(view -> {
@@ -104,6 +117,7 @@ public class GroupActivity extends AppCompatActivity {
         TagStatus selectedStatus = (TagStatus) statusOptionList.getAdapter().getItem(position);
         for (LinearLayout tag : selectedTags) {
           tag.getChildAt(1).setBackgroundColor(Color.parseColor(selectedStatus.getColor()));
+          dataStore.setQuestionStatus(tag.getId(), selectedStatus);
         }
         exitEditMode();
       });
@@ -131,6 +145,9 @@ public class GroupActivity extends AppCompatActivity {
     questionTag.getChildAt(1).setBackgroundColor(Color.parseColor(status.getColor()));
     // question content
     ((TextView) questionTag.getChildAt(2)).setText(text);
+    dataStore.setQuestionStatus(questionId, status);
+    dataStore.setQuestionTitle(questionId, text);
+    System.out.println(questionId + " --147-- " + text);
 
     // add this new tag to the question container
     questionsContainer.addView(questionTag);
@@ -156,16 +173,13 @@ public class GroupActivity extends AppCompatActivity {
    * Read Mode: click question tags to go to the questions
    * @param currentTag LinearLayout of the current question tag
    */
-  private void setQuestionTagReadMode(LinearLayout currentTag, HashMap<String, Pair<Integer, Boolean>> emojiSet) {
+  private void setQuestionTagReadMode(LinearLayout currentTag) {
     currentTag.setOnClickListener(v -> {
       Intent intent = new Intent(this, QuestionActivity.class);
       String questionTitle = ((TextView) currentTag.getChildAt(2)).getText().toString();
       intent.putExtra("questionTitle", questionTitle);
       intent.putExtra("questionId", currentTag.getId());
       intent.putExtra("groupName", dataStore.getGroupName());
-      if (emojiSet != null) {
-        dataStore.initNewQuestionActivity(currentTag.getId(), emojiSet);
-      }
       startActivity(intent);
     });
   }
@@ -195,7 +209,7 @@ public class GroupActivity extends AppCompatActivity {
       CheckBox box = (CheckBox) currentTag.getChildAt(0);
       box.setVisibility(View.GONE);
       box.setChecked(false);
-      setQuestionTagReadMode(currentTag, null);
+      setQuestionTagReadMode(currentTag);
     }
     selectedTags.clear();
     editQuestionContainer.setVisibility(View.GONE);
@@ -230,7 +244,7 @@ public class GroupActivity extends AppCompatActivity {
     addNewQuestionButton.setOnClickListener(v -> {
       String questionText = editTitle.getText().toString();
       TagStatus selectedStatus = (TagStatus) statusSpinner.getSelectedItem();
-      addNewQuestionTag(questionText, selectedStatus, defaultEmojis);
+      addNewQuestionTag(questionText, selectedStatus, defaultEmojis, -1);
       addQuestionPopupWindow.dismiss();
     });
 
