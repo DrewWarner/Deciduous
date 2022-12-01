@@ -40,7 +40,7 @@ public class JoinGroupActivity extends AppCompatActivity {
 
         Button join_button = (Button) findViewById(R.id.join_button) ;
         join_button.setOnClickListener(v -> {
-            Intent intent = new Intent(JoinGroupActivity.this, GroupActivity.class);
+            Intent intent = new Intent(this, GroupActivity.class);
             intent.putExtra("join_code_value", join_code);
             intent.putExtra("username_value", username_response.getText().toString());
             startActivity(intent);
@@ -49,7 +49,7 @@ public class JoinGroupActivity extends AppCompatActivity {
 
         Button create_button = (Button) findViewById(R.id.create_option);
         create_button.setOnClickListener(v -> {
-            Intent intent = new Intent(JoinGroupActivity.this, CreateGroupActivity.class);
+            Intent intent = new Intent(this, CreateGroupActivity.class);
             intent.putExtra("join_code_value", join_code);
             intent.putExtra("username_value", username_response.getText().toString());
             startActivity(intent);

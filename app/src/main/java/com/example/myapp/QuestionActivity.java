@@ -1,21 +1,14 @@
 package com.example.myapp;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Pair;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewConfiguration;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -25,7 +18,6 @@ import androidx.core.view.ViewCompat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map.Entry;
 
 public class QuestionActivity extends AppCompatActivity {
@@ -40,10 +32,14 @@ public class QuestionActivity extends AppCompatActivity {
   private RelativeLayout editProposalContainer;
   private LinearLayout selectedProp;
 
+  private GroupDataStore dataStore;   // data Store to store all data involved (related to a group)
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_question);
+
+    dataStore = MainActivityDataStore.getInstance().getGroupDataStore(getIntent().getStringExtra("groupName"));
 
     // edit question bar
     initEditQuestionBar();
@@ -67,7 +63,7 @@ public class QuestionActivity extends AppCompatActivity {
     confirmProposalBtn = findViewById(R.id.confirmProposalBtn);
     cancelProposalBtn = findViewById(R.id.cancelProposalBtn);
 
-    ArrayList<ProposalTagInfo> proposalsList = QuestionActivityDataStore.getInstance().getProposalsList(questionId);
+    ArrayList<ProposalTagInfo> proposalsList = dataStore.getProposalsList(questionId);
     for (ProposalTagInfo info : proposalsList) {
       LinearLayout newTag = createProposalTag(info, false);
       proposalsContainer.addView(newTag);
@@ -78,7 +74,7 @@ public class QuestionActivity extends AppCompatActivity {
       addProposalBtn.setVisibility(View.GONE);
       confirmCancelContainer.setVisibility(View.VISIBLE);
 
-      HashMap<String, Pair<Integer, Boolean>> defaultEmojis = QuestionActivityDataStore.getInstance().getDefaultEmojiSet(questionId);
+      HashMap<String, Pair<Integer, Boolean>> defaultEmojis = dataStore.getDefaultEmojiSet(questionId);
       ProposalTagInfo info = new ProposalTagInfo(ViewCompat.generateViewId(), "", defaultEmojis);
       LinearLayout proposalTag = createProposalTag(info, true);
       proposalsContainer.addView(proposalTag);
@@ -179,7 +175,7 @@ public class QuestionActivity extends AppCompatActivity {
         proposalTitle.setVisibility(View.VISIBLE);
         // update QuestionActivityDataStore
         info.setTitle(titleInput.getText().toString());
-        QuestionActivityDataStore.getInstance().putProposal(questionId, info);
+        dataStore.putProposal(questionId, info);
         // update screen buttons
         addProposalBtn.setVisibility(View.VISIBLE);
         confirmCancelContainer.setVisibility(View.GONE);

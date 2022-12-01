@@ -28,7 +28,6 @@ import com.vdurmont.emoji.Emoji;
 import com.vdurmont.emoji.EmojiManager;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -49,6 +48,8 @@ public class GroupActivity extends AppCompatActivity {
 
   private HashSet<LinearLayout> selectedTags;
 
+  private GroupDataStore dataStore;  // data store used to store all group data involved
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -60,7 +61,8 @@ public class GroupActivity extends AppCompatActivity {
     groupNameTextView = findViewById(R.id.groupName);
 
     String groupName = getIntent().getStringExtra("groupname_value");
-    groupNameTextView.setText(groupName != null ? groupName : "Bob's Group");
+    groupNameTextView.setText(groupName);
+    dataStore = MainActivityDataStore.getInstance().getGroupDataStore(groupName);
 
     // container to hold delete and edit button
     initEditQuestionBar();
@@ -71,7 +73,7 @@ public class GroupActivity extends AppCompatActivity {
     // add button
     initAddQuestionPopupView();
 
-    ((TextView) findViewById(R.id.showJoinCode)).setText("JOIN CODE: " + "Xb7TY6z0"); // TODO: dynamic
+    ((TextView) findViewById(R.id.showJoinCode)).setText(dataStore.getJoinCode());
 
     selectedTags = new HashSet<>();
 
@@ -160,8 +162,9 @@ public class GroupActivity extends AppCompatActivity {
       String questionTitle = ((TextView) currentTag.getChildAt(2)).getText().toString();
       intent.putExtra("questionTitle", questionTitle);
       intent.putExtra("questionId", currentTag.getId());
+      intent.putExtra("groupName", dataStore.getGroupName());
       if (emojiSet != null) {
-        QuestionActivityDataStore.getInstance().initNewQuestionActivity(currentTag.getId(), emojiSet);
+        dataStore.initNewQuestionActivity(currentTag.getId(), emojiSet);
       }
       startActivity(intent);
     });
@@ -174,7 +177,7 @@ public class GroupActivity extends AppCompatActivity {
     editQuestionContainer.getChildAt(0).setOnClickListener(v -> {
       for (LinearLayout tag : selectedTags) {
         questionsContainer.removeView(tag);
-        QuestionActivityDataStore.getInstance().deleteQuestionActivity(tag.getId());
+        dataStore.deleteQuestionActivity(tag.getId());
       }
       exitEditMode();
     });

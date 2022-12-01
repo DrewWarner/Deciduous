@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="20dp"
-    android:layout_marginVertical="10dp"
     android:orientation="horizontal"
-    android:gravity="center_horizontal"
-    android:padding="6dp"
-    android:weightSum="2">
-
-    <Button
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
+    android:gravity="center">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Group 1"
-        android:padding="15dp"
-        android:textSize="32sp"
-        android:layout_weight="1"
-        android:background="@color/light_gray"
+        android:textColor="@color/light_gray"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="50dp"
+        android:textSize="30sp"
+        android:background="@color/red"
         />
 </LinearLayout>

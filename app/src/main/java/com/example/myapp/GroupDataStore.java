@@ -6,11 +6,17 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class QuestionActivityDataStore {
+/**
+ * store data of ONE group by storing map of question -> proposal list
+ * question is identify by the view id of the question (generated using ViewCompat.generateViewId())
+ */
+public class GroupDataStore {
   // map questionId -> proposalsList
   private final HashMap<Integer, ArrayList<ProposalTagInfo>> questionProposalMap;
   // map questionId -> default emoji set of the question
   private final HashMap<Integer, HashMap<String, Pair<Integer, Boolean>>> questionEmojiSetMap;
+  private final String joinCode;
+  private final String groupName;
 
   /**
    * init data store of a new question if not yet exist
@@ -97,12 +103,13 @@ public class QuestionActivityDataStore {
     return res;
   }
 
-  // get the dataHolder instance to access data
-  public static QuestionActivityDataStore getInstance() { return holder; }
-
-  private QuestionActivityDataStore() {
+  public GroupDataStore(String name) {
     questionProposalMap = new HashMap<>();
     questionEmojiSetMap = new HashMap<>();
+    joinCode = "7DX5bCG6";  // TODO: random
+    groupName = name;
   }
-  private static final QuestionActivityDataStore holder = new QuestionActivityDataStore();
+
+  public String getJoinCode() { return joinCode; }
+  public String getGroupName() { return groupName; }
 }
