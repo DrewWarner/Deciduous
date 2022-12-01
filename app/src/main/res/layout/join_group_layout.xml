@@ -65,40 +65,33 @@
             android:layout_margin="0dp"/>
     </LinearLayout>
 
-
     <LinearLayout
+        android:id="@+id/join_code_input_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_margin="50dp">
-
         <EditText
-            android:id="@+id/join_code1"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:maxLength="1"/>
         <EditText
-            android:id="@+id/join_code2"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:maxLength="1"/>
         <EditText
-            android:id="@+id/join_code3"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:maxLength="1"/>
         <EditText
-            android:id="@+id/join_code4"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:maxLength="1"/>
         <EditText
-            android:id="@+id/join_code5"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:maxLength="1"/>
         <EditText
-            android:id="@+id/join_code6"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:maxLength="1"/>

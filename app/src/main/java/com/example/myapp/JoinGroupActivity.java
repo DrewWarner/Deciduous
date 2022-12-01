@@ -2,10 +2,10 @@ package com.example.myapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class JoinGroupActivity extends AppCompatActivity {
@@ -14,48 +14,55 @@ public class JoinGroupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.join_group_layout);
 
-        EditText username_response = (EditText)findViewById(R.id.username_response);
-
-        Bundle b = getIntent().getExtras();
-        if (b != null) {
-            String username = (String) b.get("username_value");
-            username_response.setText(username);
-        }
-
-        EditText jc1 = (EditText)findViewById(R.id.join_code1);
-        EditText jc2 = (EditText)findViewById(R.id.join_code2);
-        EditText jc3 = (EditText)findViewById(R.id.join_code3);
-        EditText jc4 = (EditText)findViewById(R.id.join_code4);
-        EditText jc5 = (EditText)findViewById(R.id.join_code5);
-        EditText jc6 = (EditText)findViewById(R.id.join_code6);
-
-        String c1 = jc1.getText().toString();
-        String c2 = jc2.getText().toString();
-        String c3 = jc3.getText().toString();
-        String c4 = jc4.getText().toString();
-        String c5 = jc5.getText().toString();
-        String c6 = jc6.getText().toString();
-
-        String join_code = c1 + c2 + c3 + c4 + c5 + c6;
-
-        Button join_button = (Button) findViewById(R.id.join_button) ;
-        join_button.setOnClickListener(v -> {
-            Intent intent = new Intent(this, GroupActivity.class);
-            intent.putExtra("join_code_value", join_code);
-            intent.putExtra("username_value", username_response.getText().toString());
-            startActivity(intent);
-            finish();
+        findViewById(R.id.join_button).setOnClickListener(v -> {
+            // join group (group must exist)
+            String join_code = getInputJoinCode();
+            String groupName = MainActivityDataStore.getInstance().findGroupByCode(join_code);
+            if (groupName!= null) {
+                // this will add group in record, and when main page re-render, new group will be shown
+                MainActivityDataStore.getInstance().joinNewGroupActivity(groupName, join_code);
+                Intent intent = new Intent(this, GroupActivity.class);
+                intent.putExtra("groupname_value", groupName);
+                startActivity(intent);
+                finish();
+            } else {
+                new AlertDialog.Builder(this)
+                        .setTitle("GROUP NOT FIND, PLEASE MAKE SURE JOIN CODE IS VALID")
+                        .setPositiveButton(android.R.string.yes, null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+                clearJoinCodeInput();
+            }
         });
 
-        Button create_button = (Button) findViewById(R.id.create_option);
-        create_button.setOnClickListener(v -> {
+        findViewById(R.id.create_option).setOnClickListener(v -> {
+            // navigate to create group page
             Intent intent = new Intent(this, CreateGroupActivity.class);
-            intent.putExtra("join_code_value", join_code);
-            intent.putExtra("username_value", username_response.getText().toString());
             startActivity(intent);
             finish();
         });
-
     }
 
+    /**
+     * get join code from the edit text views
+     * @return join code the user input
+     */
+    private String getInputJoinCode() {
+        LinearLayout container = findViewById(R.id.join_code_input_container);
+        StringBuilder joinCode = new StringBuilder();
+        for (int i = 0; i < container.getChildCount(); i++) {
+            joinCode.append(((EditText) container.getChildAt(i)).getText().toString());
+        }
+        return joinCode.toString();
+    }
+
+    /**
+     * clear all join code input, used in error handling
+     */
+    private void clearJoinCodeInput() {
+        LinearLayout container = findViewById(R.id.join_code_input_container);
+        for (int i = 0; i < container.getChildCount(); i++) {
+            ((EditText) container.getChildAt(i)).setText("");
+        }
+    }
 }

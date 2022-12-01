@@ -73,7 +73,7 @@ public class GroupActivity extends AppCompatActivity {
     // add button
     initAddQuestionPopupView();
 
-    ((TextView) findViewById(R.id.showJoinCode)).setText(dataStore.getJoinCode());
+    ((TextView) findViewById(R.id.showJoinCode)).setText("JOIN CODE: " + dataStore.getJoinCode());
 
     selectedTags = new HashSet<>();
 

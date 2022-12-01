@@ -5,6 +5,7 @@ import android.util.Pair;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 /**
  * store data of ONE group by storing map of question -> proposal list
@@ -106,8 +107,28 @@ public class GroupDataStore {
   public GroupDataStore(String name) {
     questionProposalMap = new HashMap<>();
     questionEmojiSetMap = new HashMap<>();
-    joinCode = "7DX5bCG6";  // TODO: random
+    joinCode = generateJoinCode();
     groupName = name;
+  }
+
+  // this constructor allow us to control join code for demo
+  public GroupDataStore(String name, String code) {
+    questionProposalMap = new HashMap<>();
+    questionEmojiSetMap = new HashMap<>();
+    joinCode = code;
+    groupName = name;
+  }
+
+  private String generateJoinCode() {
+    Random rng = new Random();
+    char[] base = Integer.toString(rng.nextInt(900000) + 100000).toCharArray();
+    String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    int lc = rng.nextInt(7);    // random number of letter
+    for (int i = 0; i < lc; i++) {
+      int idx = rng.nextInt(6);   // position to change to letter
+      base[idx] = alphabet.charAt(rng.nextInt(52));
+    }
+    return String.valueOf(base);
   }
 
   public String getJoinCode() { return joinCode; }
