@@ -3,7 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingVertical="10dp"
-    android:background="@color/grey_blue"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:layout_marginTop="75dp"
+    android:background="@color/yellow"
     android:orientation="vertical">
 
     <EditText
@@ -13,7 +16,7 @@
         android:layout_marginHorizontal="10dp"
         android:gravity="start"
         android:textSize="26sp"
-        android:hint="Question: "
+        android:hint="Question"
         android:inputType="text" />
 
     <Spinner

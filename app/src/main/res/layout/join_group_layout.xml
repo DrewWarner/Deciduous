@@ -18,6 +18,7 @@
             android:id="@+id/join_option"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
             android:textSize="30sp"
             android:gravity="center"
             android:layout_weight="0.5"
@@ -30,13 +31,13 @@
             android:id="@+id/create_option"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:textSize="30sp"
             android:gravity="center"
             android:layout_weight="0.5"
-            android:backgroundTint="@color/red"
+            android:backgroundTint="@color/light_gray"
             android:alpha="0.70"
             android:text="CREATE"
-            android:textColor="@color/black"
             />
     </LinearLayout>
 
