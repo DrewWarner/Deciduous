@@ -24,7 +24,7 @@
             android:backgroundTint="@color/red"
             android:alpha="0.70"
             android:text="JOIN"
-            android:textColor="@color/blue"
+            android:textColor="@color/white"
             />
         <Button
             android:id="@+id/create_option"
