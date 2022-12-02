@@ -69,7 +69,8 @@
             android:id="@+id/groupname_response"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:layout_marginLeft="5dp"
+            android:textSize="26sp"
             android:layout_margin="0dp"/>
     </LinearLayout>
 
@@ -92,7 +93,8 @@
                 android:id="@+id/username_response"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:layout_marginLeft="5dp"
+                android:textSize="26sp"
                 android:layout_margin="0dp"/>
         </LinearLayout>
 
