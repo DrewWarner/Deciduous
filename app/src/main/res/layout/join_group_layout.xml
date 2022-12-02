@@ -36,6 +36,7 @@
             android:backgroundTint="@color/red"
             android:alpha="0.70"
             android:text="CREATE"
+            android:textColor="@color/black"
             />
     </LinearLayout>
 
