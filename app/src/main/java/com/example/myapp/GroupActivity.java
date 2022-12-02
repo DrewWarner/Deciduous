@@ -147,7 +147,6 @@ public class GroupActivity extends AppCompatActivity {
     ((TextView) questionTag.getChildAt(2)).setText(text);
     dataStore.setQuestionStatus(questionId, status);
     dataStore.setQuestionTitle(questionId, text);
-    System.out.println(questionId + " --147-- " + text);
 
     // add this new tag to the question container
     questionsContainer.addView(questionTag);
